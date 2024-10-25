@@ -1,6 +1,6 @@
 <template>
     <div class="container mt-4">
-        <h1>Gestione Task</h1>
+        <h1 class="text-center">Gestione Task</h1>
         <div v-if="message" class="alert alert-success">{{ message }}</div>
 
         <form @submit.prevent="createTask">
@@ -10,7 +10,7 @@
             </div>
             <div class="mb-3">
                 <select v-model="newTaskCompleted" class="form-control">
-                    <option value="" disabled selected>Completato ?</option>
+                    <option value="" disabled selected>Completato?</option>
                     <option :value="true">Sì</option>
                     <option :value="false">No</option>
                 </select>
@@ -23,7 +23,7 @@
                 <tr>
                     <th>N.</th>
                     <th>Nome</th>
-                    <th>Fatto?</th>
+                    <th>Completo?</th>
                     <th>Azioni</th>
                 </tr>
             </thead>
@@ -42,7 +42,6 @@
                         </div>
                         <div v-else>
                             <select v-model="editedTaskCompleted" class="form-control">
-                                <option value="" disabled selected>Completato ?</option>
                                 <option :value="true">Sì</option>
                                 <option :value="false">No</option>
                             </select>
@@ -50,7 +49,7 @@
                     </td>
                     <td>
                         <button v-if="task.id !== editingTaskId" @click="startEditing(task)"
-                            class="btn btn-warning btn-sm me-2">
+                            class="btn btn-warning btn-sm me-2 text-white">
                             Modifica
                         </button>
                         <button v-else @click="updateTask(task.id)" class="btn btn-success btn-sm me-2">
@@ -74,9 +73,9 @@ export default {
         return {
             tasks: [],
             newTaskName: '',
-            newTaskCompleted: '',
+            newTaskCompleted: false,
             editedTaskName: '',
-            editedTaskCompleted: '',
+            editedTaskCompleted: false,
             editingTaskId: null,
             message: '',
         };
@@ -94,11 +93,11 @@ export default {
             try {
                 await axios.post('http://localhost:8000/api/tasks', {
                     name: this.newTaskName,
-                    completed: this.newTaskCompleted === 'true',
+                    completed: this.newTaskCompleted,
                 });
                 this.message = 'Task creato con successo!';
                 this.newTaskName = '';
-                this.newTaskCompleted = '';
+                this.newTaskCompleted = false;
                 this.fetchTasks();
             } catch (error) {
                 console.error("Errore nella creazione del task:", error);
@@ -107,18 +106,18 @@ export default {
         startEditing(task) {
             this.editingTaskId = task.id;
             this.editedTaskName = task.name;
-            this.editedTaskCompleted = task.completed.toString();
+            this.editedTaskCompleted = task.completed;
         },
         async updateTask(taskId) {
             try {
                 await axios.put(`http://localhost:8000/api/tasks/${taskId}`, {
                     name: this.editedTaskName,
-                    completed: this.editedTaskCompleted === 'true',
+                    completed: this.editedTaskCompleted,
                 });
                 this.message = 'Task aggiornato con successo!';
                 this.editingTaskId = null;
                 this.editedTaskName = '';
-                this.editedTaskCompleted = '';
+                this.editedTaskCompleted = false;
                 this.fetchTasks();
             } catch (error) {
                 console.error("Errore nell'aggiornamento del task:", error);
