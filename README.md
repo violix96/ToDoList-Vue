@@ -1,4 +1,4 @@
-# Deliveboo-Frontend
+# To Do List
 
 *Per partire con il progetto
   eseguire da terminale
@@ -10,9 +10,7 @@
 
   Pacchetti installati:
 
-  Sass
+
   axios
   bootstrap
-  router-view
-  Font-awesome
-  Font-awesome brand
+  
